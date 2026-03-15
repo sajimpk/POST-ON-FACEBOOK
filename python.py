@@ -50,68 +50,30 @@ def format_post(text):
 
 
 def generate_post():
-    prompt = """ 
+    prompt = """
     From now on, তুমি একজন বাংলাদেশি Funny News Reporter।
-তোমার কাজ হলো হাস্যকর, মজার, ব্যঙ্গাত্মক (satire) স্টাইলে ছোট ছোট Bangladeshi Funny News বানানো।
+    তোমার কাজ হলো হাস্যকর, মজার, ব্যঙ্গাত্মক স্টাইলে ছোট Bangladeshi Funny News বানানো।
 
-🎯 ROLE & STYLE:
-- টোন হবে: হাস্যকর, হালকা ব্যঙ্গ, exaggeration, overreaction
-- ভাষা হবে সহজ, প্রাঞ্জল বাংলা (প্রয়োজনে ইংরেজি শব্দ মিক্স করা যাবে)
-- কনটেন্ট হবে social media–friendly এবং Facebook audience-এর জন্য উপযোগী
+    3-6 lines
+    first line headline
+    end with 3-5 hashtags
+    """
 
-🧠 TOPIC RULE (প্রতিবার যেকোনো ১টি):
-- Daily Bangladeshi Life (লোডশেডিং, গরম, বৃষ্টি, বাজার, বাস)
-- Student Life (exam, assignment, viva, online class)
-- Relationship & Single Life (seen, ghosting, breakup excuses)
-- Social Media & Internet Culture (reels, influencer, comment section)
-- Shopping & Offers (sale, discount, Eid shopping)
-- Traffic & Public Transport (bus, CNG, jam)
-- Cricket (light fun only, no hate)
-
-📝 CONTENT FORMAT:
-1️⃣ প্রতিবার শুধু **১টি নতুন Funny Bangladeshi News Headline + Short Story** দেবে  
-2️⃣ মোট দৈর্ঘ্য হবে **৩–৬ লাইন**  
-3️⃣ প্রথম লাইন হবে catchy headline  
-4️⃣ পরের লাইনগুলো হবে ছোট মজার নিউজ স্টোরি  
-5️⃣ শেষে **৩–৫টি ভাইরাল হ্যাশট্যাগ** (বাংলা + ইংরেজি মিক্স)
-
-😂 HUMOR RULE:
-- Relatable হতে হবে
-- Exaggeration ব্যবহার করবে
-- কাউকে অপমান, টার্গেট বা হেট করা যাবে না
-- রাজনৈতিক ব্যক্তি, সংবেদনশীল বিষয় ব্যবহার করা যাবে না
-- Fake news টাইপ কিছু থাকবে না (pure satire)
-
-🔥 EMOJI RULE:
-- প্রতিবার **২–৪টি ইমোজি**
-- একই ইমোজি বারবার ব্যবহার করা যাবে না
-
-🔁 UNIQUENESS RULE:
-- প্রতিবার কনটেন্ট ১০০% নতুন হতে হবে
-- আগের কোনো নিউজের সাথে মিল থাকা যাবে না
-- একই টপিক পরপর ব্যবহার করা যাবে না
-
-⚠️ OUTPUT RULE:
-- শুধুমাত্র নিউজ কনটেন্ট রিটার্ন করবে
-- কোনো explanation, title, label, note, intro কিছুই লিখবে না
-  
-"""
     completion = client.chat.completions.create(
-    extra_headers={
-        "HTTP-Referer": "sajim.com", 
-        "X-Title": "Sajim",
-    },
-    extra_body={},
-    model="tngtech/deepseek-r1t2-chimera:free",
-    messages=[
-        {
-        "role": "user",
-        "content": prompt
-        }
-    ]
+        model="openrouter/hunter-alpha",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.9,
+        max_tokens=150
     )
+
     message = completion.choices[0].message.content
     final_text = format_post(message)
+
     return final_text
 
 def post_to_facebook(message, image_path=None):
